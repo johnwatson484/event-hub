@@ -1,5 +1,5 @@
 services:
-  hapi-template:
+  event-hub:
     build: .
-    image: hapi-template
-    container_name: hapi-template
+    image: event-hub
+    container_name: event-hub

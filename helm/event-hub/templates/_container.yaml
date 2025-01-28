@@ -1,0 +1,2 @@
+{{- define "event-hub.container" -}}
+{{- end -}}

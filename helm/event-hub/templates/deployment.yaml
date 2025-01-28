@@ -1,0 +1,3 @@
+{{- include "helm-library.deployment" (list . "event-hub.deployment") -}}
+{{- define "event-hub.deployment" -}}
+{{- end -}}

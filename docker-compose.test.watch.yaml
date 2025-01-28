@@ -1,8 +1,8 @@
 services:
-  hapi-template:
+  event-hub:
     extends:
       file: docker-compose.test.yaml
-      service: hapi-template
+      service: event-hub
     command: npm run test:watch
     volumes:
       - ./.git:/home/node/.git

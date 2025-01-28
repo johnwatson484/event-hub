@@ -1,8 +1,8 @@
 services:
-  hapi-template:
+  event-hub:
     extends:
       file: docker-compose.test.watch.yaml
-      service: hapi-template
+      service: event-hub
     command: npm run test:debug
     ports:
       - "9229:9229"

@@ -1,0 +1,5 @@
+{{- include "helm-library.configmap" (list . "event-hub.configmap") -}}
+{{- define "event-hub.configmap" -}}
+data:
+  NODE_ENV: {{ .Values.configMap.environment | quote }}
+{{- end -}}

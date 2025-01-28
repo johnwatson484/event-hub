@@ -1,6 +1,6 @@
 services:
-  hapi-template:
+  event-hub:
     extends:
       file: docker-compose.override.yaml
-      service: hapi-template
+      service: event-hub
     command: npm run start:debug
