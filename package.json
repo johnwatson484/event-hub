@@ -17,6 +17,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "aws-sdk": "2.1692.0",
     "convict": "6.2.4",
     "convict-format-with-validator": "6.2.0",
     "joi": "17.13.3",
