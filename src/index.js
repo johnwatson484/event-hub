@@ -1,32 +1,23 @@
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
 import { ReceiveMessageCommand, DeleteMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs'
-
-const TOPIC_ARN = process.env.AWS_SNS_TOPIC_ARN
-const QUEUE_URL = process.env.AWS_SQS_QUEUE_URL
-
-const credentials = {
-  accessKeyId: process.env.ACCESS_KEY,
-  secretAccessKey: process.env.SECRET_KEY,
-}
+import config from './config.js'
 
 async function sendMessage (message) {
-  const client = new SNSClient({ region: 'eu-west-2', credentials })
+  const client = new SNSClient()
   await client.send(
     new PublishCommand({
       Message: message,
-      TopicArn: TOPIC_ARN,
-      MessageGroupId: 'demo-group',
-      MessageDeduplicationId: Date.now().toString(),
+      TopicArn: config.get('topic')
     })
   )
   console.log('Message sent')
 }
 
 async function receiveMessage () {
-  const client = new SQSClient({ region: 'eu-west-2', credentials })
+  const client = new SQSClient()
   const { Messages } = await client.send(
     new ReceiveMessageCommand({
-      QueueUrl: QUEUE_URL,
+      QueueUrl: config.get('queue'),
       MaxNumberOfMessages: 10,
       MessageAttributeNames: ['All'],
       AttributeNames: ['SentTimestamp'],
@@ -40,7 +31,7 @@ async function receiveMessage () {
     })
     await client.send(
       new DeleteMessageBatchCommand({
-        QueueUrl: QUEUE_URL,
+        QueueUrl: config.get('queue'),
         Entries: Messages.map((message) => ({
           Id: message.MessageId,
           ReceiptHandle: message.ReceiptHandle,
