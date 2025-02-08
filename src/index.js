@@ -1,17 +1,5 @@
-import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
 import { ReceiveMessageCommand, DeleteMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs'
 import config from './config.js'
-
-async function sendMessage (message) {
-  const client = new SNSClient()
-  await client.send(
-    new PublishCommand({
-      Message: message,
-      TopicArn: config.get('topic')
-    })
-  )
-  console.log('Message sent')
-}
 
 async function receiveMessage () {
   const client = new SQSClient()
@@ -41,5 +29,4 @@ async function receiveMessage () {
   }
 }
 
-await sendMessage('Hello, world!')
 await receiveMessage()

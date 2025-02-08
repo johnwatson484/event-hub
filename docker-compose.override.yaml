@@ -14,12 +14,35 @@ services:
     depends_on:
       localstack:
         condition: service_healthy
+      event-hub-client:
+        condition: service_started
     environment:
       AWS_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       AWS_SNS_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:topic1
       AWS_SQS_QUEUE_URL: http://localstack:4566/000000000000/queue1
+      AWS_ENDPOINT_URL: http://localstack:4566
+
+  event-hub-client:
+    build:
+      context: ./client
+      target: development
+    image: event-hub-client-development
+    container_name: event-hub-client-development
+    volumes:
+      - ./client/src:/home/node/src
+      - ./client/package.json:/home/node/package.json
+    networks:
+      - event-hub
+    depends_on:
+      localstack:
+        condition: service_healthy
+    environment:
+      AWS_REGION: eu-west-2
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_SNS_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:topic1
       AWS_ENDPOINT_URL: http://localstack:4566
 
   localstack:
