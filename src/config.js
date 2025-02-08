@@ -15,30 +15,6 @@ const config = convict({
     format: Boolean,
     default: process.env.NODE_ENV === 'development',
   },
-  endpoint: {
-    doc: 'AWS endpoint URL.',
-    format: String,
-    env: 'AWS_ENDPOINT_URL',
-    default: ''
-  },
-  region: {
-    doc: 'AWS region.',
-    format: String,
-    env: 'AWS_REGION',
-    default: ''
-  },
-  accessKey: {
-    doc: 'AWS access key ID.',
-    format: String,
-    env: 'AWS_ACCESS_KEY_ID',
-    default: ''
-  },
-  secretKey: {
-    doc: 'AWS secret access key.',
-    format: String,
-    env: 'AWS_SECRET_ACCESS_KEY',
-    default: ''
-  },
   topic: {
     doc: 'AWS SNS topic ARN.',
     format: String,
