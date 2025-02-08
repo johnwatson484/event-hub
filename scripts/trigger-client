@@ -1,2 +1,2 @@
 #!/bin/sh
-docker exec -it event-hub-client-development npm run start
+docker exec -it event-hub-client-development npm run start $@

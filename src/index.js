@@ -1,3 +1,4 @@
+import util from 'util'
 import { ReceiveMessageCommand, DeleteMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs'
 import config from './config.js'
 
@@ -18,7 +19,7 @@ async function receiveMessage () {
   if (Messages) {
     console.log(`Messages received: ${Messages.length}`)
     Messages.forEach((message) => {
-      console.log(JSON.parse(message.Body).Message)
+      console.log(util.inspect(JSON.parse(message.Body).Message, false, null, true))
     })
     await client.send(
       new DeleteMessageBatchCommand({
