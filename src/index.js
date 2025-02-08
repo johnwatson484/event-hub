@@ -1,16 +1,19 @@
 import { ReceiveMessageCommand, DeleteMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs'
 import config from './config.js'
 
+const client = new SQSClient()
+
+const receiveParams = {
+  QueueUrl: config.get('queue'),
+  MaxNumberOfMessages: 10,
+  MessageAttributeNames: ['All'],
+  AttributeNames: ['SentTimestamp'],
+  WaitTimeSeconds: 10,
+}
+
 async function receiveMessage () {
-  const client = new SQSClient()
   const { Messages } = await client.send(
-    new ReceiveMessageCommand({
-      QueueUrl: config.get('queue'),
-      MaxNumberOfMessages: 10,
-      MessageAttributeNames: ['All'],
-      AttributeNames: ['SentTimestamp'],
-      WaitTimeSeconds: 10,
-    })
+    new ReceiveMessageCommand(receiveParams)
   )
   if (Messages) {
     console.log(`Messages received: ${Messages.length}`)
@@ -29,4 +32,13 @@ async function receiveMessage () {
   }
 }
 
-await receiveMessage()
+async function pollMessages () {
+  try {
+    await receiveMessage()
+  } catch (error) {
+    console.error('Error receiving messages:', error)
+  }
+}
+
+// Poll messages every 5 seconds
+setInterval(pollMessages, 5000)
