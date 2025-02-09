@@ -20,13 +20,13 @@ const config = convict({
       doc: 'AWS SNS topic ARN.',
       format: String,
       env: 'AWS_SNS_TOPIC_ARN',
-      default: ''
+      default: null
     },
     queue: {
       doc: 'AWS SQS queue URL.',
       format: String,
       env: 'AWS_SQS_QUEUE_URL',
-      default: ''
+      default: null
     },
   },
   db: {
@@ -34,7 +34,7 @@ const config = convict({
       doc: 'MongoDB connection URI.',
       format: String,
       env: 'MONGODB_URI',
-      default: '',
+      default: null,
     },
   }
 })
