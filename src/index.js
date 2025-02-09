@@ -1,8 +1,6 @@
 import util from 'util'
-import { ReceiveMessageCommand, DeleteMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs'
+import { ReceiveMessageCommand, DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs'
 import config from './config.js'
-
-const client = new SQSClient()
 
 const receiveParams = {
   QueueUrl: config.get('queue'),
@@ -12,34 +10,31 @@ const receiveParams = {
   WaitTimeSeconds: 10,
 }
 
-async function receiveMessage () {
-  const { Messages } = await client.send(
-    new ReceiveMessageCommand(receiveParams)
-  )
-  if (Messages) {
-    console.log(`Messages received: ${Messages.length}`)
-    Messages.forEach((message) => {
-      console.log(util.inspect(JSON.parse(message.Body).Message, false, null, true))
-    })
-    await client.send(
-      new DeleteMessageBatchCommand({
-        QueueUrl: config.get('queue'),
-        Entries: Messages.map((message) => ({
-          Id: message.MessageId,
-          ReceiptHandle: message.ReceiptHandle,
-        })),
-      })
-    )
-  }
-}
+const client = new SQSClient()
+
+setInterval(pollMessages, 5000)
 
 async function pollMessages () {
   try {
-    await receiveMessage()
+    await receiveMessages()
   } catch (error) {
     console.error('Error receiving messages:', error)
   }
 }
 
-// Poll messages every 5 seconds
-setInterval(pollMessages, 5000)
+async function receiveMessages () {
+  const { Messages } = await client.send(
+    new ReceiveMessageCommand(receiveParams)
+  )
+  if (Messages) {
+    for (const message of Messages) {
+      console.log('Message received:', util.inspect(JSON.parse(JSON.parse(message.Body).Message), false, null, true))
+      await client.send(
+        new DeleteMessageCommand({
+          QueueUrl: config.get('queue'),
+          ReceiptHandle: message.ReceiptHandle
+        })
+      )
+    }
+  }
+}
