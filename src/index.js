@@ -3,7 +3,7 @@ import { ReceiveMessageCommand, DeleteMessageCommand, SQSClient } from '@aws-sdk
 import config from './config.js'
 
 const receiveParams = {
-  QueueUrl: config.get('queue'),
+  QueueUrl: config.get('message.queue'),
   MaxNumberOfMessages: 10,
   MessageAttributeNames: ['All'],
   AttributeNames: ['SentTimestamp'],
@@ -31,7 +31,7 @@ async function receiveMessages () {
       console.log('Message received:', util.inspect(JSON.parse(JSON.parse(message.Body).Message), false, null, true))
       await client.send(
         new DeleteMessageCommand({
-          QueueUrl: config.get('queue'),
+          QueueUrl: config.get('message.queue'),
           ReceiptHandle: message.ReceiptHandle
         })
       )

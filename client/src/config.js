@@ -20,13 +20,7 @@ const config = convict({
     format: String,
     env: 'AWS_SNS_TOPIC_ARN',
     default: ''
-  },
-  queue: {
-    doc: 'AWS SQS queue URL.',
-    format: String,
-    env: 'AWS_SQS_QUEUE_URL',
-    default: ''
-  },
+  }
 })
 
 config.validate({ allowed: 'strict' })
