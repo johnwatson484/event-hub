@@ -60,6 +60,7 @@ services:
       AWS_SECRET_ACCESS_KEY: test
     volumes:
       - ./scripts/localstack.sh:/etc/localstack/init/ready.d/localstack.sh
+      - localstack-data:/var/lib/localstack
     healthcheck:
       test: ['CMD', 'curl', 'localhost:4566']
       interval: 5s
@@ -74,8 +75,14 @@ services:
       - "27017:27017"
     networks:
       - event-hub
+    volumes:
+      - mongodb-data:/data/db
 
 networks:
   event-hub:
     driver: bridge
     name: event-hub
+
+volumes:
+  mongodb-data:
+  localstack-data:
