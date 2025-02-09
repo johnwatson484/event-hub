@@ -2,6 +2,7 @@ import util from 'util'
 import { ReceiveMessageCommand, DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs'
 import { MongoClient } from 'mongodb'
 import config from './config.js'
+import schema from './schema.js'
 
 const receiveParams = {
   QueueUrl: config.get('message.queue'),
@@ -33,9 +34,14 @@ async function receiveMessages () {
   )
   if (Messages) {
     for (const message of Messages) {
-      const messageContent = JSON.parse(JSON.parse(message.Body).Message)
-      console.log('Message received:', util.inspect(messageContent), false, null, true)
-      await mongoCollection.insertOne(messageContent)
+      const event = JSON.parse(JSON.parse(message.Body).Message)
+      console.log('Message received:', util.inspect(event, false, null, true))
+
+      if (validateEvent(event)) {
+        await mongoCollection.insertOne(event)
+        console.log('Event saved to MongoDB')
+      }
+
       await messageClient.send(
         new DeleteMessageCommand({
           QueueUrl: config.get('message.queue'),
@@ -44,4 +50,9 @@ async function receiveMessages () {
       )
     }
   }
+}
+
+function validateEvent (event) {
+  const validationResult = schema.validate(event, { abortEarly: false, allowUnknown: true })
+  return !validationResult.error
 }
