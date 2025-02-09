@@ -1,5 +1,6 @@
 import util from 'util'
 import { ReceiveMessageCommand, DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs'
+import { MongoClient } from 'mongodb'
 import config from './config.js'
 
 const receiveParams = {
@@ -10,7 +11,11 @@ const receiveParams = {
   WaitTimeSeconds: 10,
 }
 
-const client = new SQSClient()
+const messageClient = new SQSClient()
+
+const mongoClient = new MongoClient(`${config.get('db.uri')}}?retryWrites=true&w=majority`)
+await mongoClient.connect()
+const mongoCollection = mongoClient.db('event-hub').collection('events')
 
 setInterval(pollMessages, 5000)
 
@@ -23,13 +28,15 @@ async function pollMessages () {
 }
 
 async function receiveMessages () {
-  const { Messages } = await client.send(
+  const { Messages } = await messageClient.send(
     new ReceiveMessageCommand(receiveParams)
   )
   if (Messages) {
     for (const message of Messages) {
-      console.log('Message received:', util.inspect(JSON.parse(JSON.parse(message.Body).Message), false, null, true))
-      await client.send(
+      const messageContent = JSON.parse(JSON.parse(message.Body).Message)
+      console.log('Message received:', util.inspect(messageContent), false, null, true)
+      await mongoCollection.insertOne(messageContent)
+      await messageClient.send(
         new DeleteMessageCommand({
           QueueUrl: config.get('message.queue'),
           ReceiptHandle: message.ReceiptHandle

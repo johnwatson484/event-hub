@@ -30,35 +30,11 @@ const config = convict({
     },
   },
   db: {
-    host: {
-      doc: 'MongoDB host',
+    uri: {
+      doc: 'MongoDB connection URI.',
       format: String,
-      env: 'MONGODB_HOST',
-      default: ''
-    },
-    port: {
-      doc: 'MongoDB port',
-      format: 'port',
-      env: 'MONGODB_PORT',
-      default: 27017
-    },
-    user: {
-      doc: 'MongoDB user',
-      format: String,
-      env: 'MONGODB_USER',
-      default: ''
-    },
-    password: {
-      doc: 'MongoDB password',
-      format: String,
-      env: 'MONGODB_PASSWORD',
-      default: ''
-    },
-    database: {
-      doc: 'MongoDB database',
-      format: String,
-      env: 'MONGODB_DATABASE',
-      default: 'events'
+      env: 'MONGODB_URI',
+      default: '',
     },
   }
 })
