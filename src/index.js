@@ -18,7 +18,7 @@ const mongoClient = new MongoClient(`${config.get('db.uri')}}?retryWrites=true&w
 await mongoClient.connect()
 const mongoCollection = mongoClient.db('event-hub').collection('events')
 
-setInterval(pollMessages, 5000)
+setInterval(pollMessages, 1000)
 
 async function pollMessages () {
   try {
