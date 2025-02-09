@@ -28,6 +28,11 @@ const config = convict({
       env: 'AWS_SQS_QUEUE_URL',
       default: null
     },
+    pollingInterval: {
+      doc: 'Interval in milliseconds to poll for messages.',
+      format: 'int',
+      default: 1000
+    }
   },
   db: {
     uri: {
