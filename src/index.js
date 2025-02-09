@@ -37,7 +37,7 @@ async function receiveMessages () {
       const event = JSON.parse(JSON.parse(message.Body).Message)
       console.log('Message received:', util.inspect(event, false, null, true))
 
-      if (validateEvent(event)) {
+      if (isEventValid(event)) {
         await mongoCollection.insertOne(event)
         console.log('Event saved to MongoDB')
       }
@@ -52,7 +52,7 @@ async function receiveMessages () {
   }
 }
 
-function validateEvent (event) {
+function isEventValid (event) {
   const validationResult = schema.validate(event, { abortEarly: false, allowUnknown: true })
   return !validationResult.error
 }
