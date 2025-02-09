@@ -13,8 +13,8 @@ Or:
 ## Running application
 ### Docker
 ```
-docker-compose build
-docker-compose up
+docker compose build
+docker compose up
 ```
 
 ### Node

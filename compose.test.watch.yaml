@@ -1,7 +1,7 @@
 services:
   event-hub:
     extends:
-      file: docker-compose.test.yaml
+      file: compose.test.yaml
       service: event-hub
     command: npm run test:watch
     volumes:

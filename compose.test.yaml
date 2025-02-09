@@ -1,7 +1,7 @@
 services:
   event-hub:
     extends:
-      file: docker-compose.yaml
+      file: compose.yaml
       service: event-hub
     build:
       target: development

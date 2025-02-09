@@ -1,7 +1,7 @@
 services:
   event-hub:
     extends:
-      file: docker-compose.test.watch.yaml
+      file: compose.test.watch.yaml
       service: event-hub
     command: npm run test:debug
     ports:

@@ -5,7 +5,7 @@ helm/
 .vscode/
 .dockerignore
 .gitignore
-docker-compose*
+compose*
 LICENSE
 README.md
 Dockerfile

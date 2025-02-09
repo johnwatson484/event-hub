@@ -1,6 +1,6 @@
 services:
   event-hub:
     extends:
-      file: docker-compose.override.yaml
+      file: compose.override.yaml
       service: event-hub
     command: npm run start:debug
