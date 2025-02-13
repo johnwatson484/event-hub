@@ -26,7 +26,9 @@ async function sendMessage (message) {
   await client.send(
     new PublishCommand({
       Message: message,
-      TopicArn: config.get('topic')
+      TopicArn: config.get('topic'),
+      MessageGroupId: 'event-hub-client',
+      MessageDeduplicationId: crypto.randomUUID()
     })
   )
   console.log('Message sent')

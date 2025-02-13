@@ -22,8 +22,8 @@ services:
       AWS_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
-      AWS_SNS_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:events
-      AWS_SQS_QUEUE_URL: http://localstack:4566/000000000000/event-hub
+      AWS_SNS_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:events.fifo
+      AWS_SQS_QUEUE_URL: http://localstack:4566/000000000000/event-hub.fifo
       AWS_ENDPOINT_URL: http://localstack:4566
       MONGODB_URI: mongodb://mongo:27017/event-hub
 
@@ -45,7 +45,7 @@ services:
       AWS_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
-      AWS_SNS_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:events
+      AWS_SNS_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:events.fifo
       AWS_ENDPOINT_URL: http://localstack:4566
 
   localstack:

@@ -7,12 +7,12 @@ AWS_REGION=eu-west-2
 
 create_queue() {
   local QUEUE_NAME_TO_CREATE=$1
-  awslocal --endpoint-url=http://${LOCALSTACK_HOST}:4566 sqs create-queue --queue-name ${QUEUE_NAME_TO_CREATE} --region ${AWS_REGION} --attributes VisibilityTimeout=30
+  awslocal --endpoint-url=http://${LOCALSTACK_HOST}:4566 sqs create-queue --queue-name ${QUEUE_NAME_TO_CREATE} --region ${AWS_REGION} --attributes VisibilityTimeout=30,FifoQueue=true
 }
 
 create_topic() {
   local TOPIC_NAME_TO_CREATE=$1
-  awslocal --endpoint-url=http://${LOCALSTACK_HOST}:4566 sns create-topic --name ${TOPIC_NAME_TO_CREATE} --region ${AWS_REGION}
+  awslocal --endpoint-url=http://${LOCALSTACK_HOST}:4566 sns create-topic --name ${TOPIC_NAME_TO_CREATE} --region ${AWS_REGION} --attributes FifoTopic=true
 }
 
 subscribe_queue_to_topic() {
@@ -22,7 +22,7 @@ subscribe_queue_to_topic() {
   awslocal --endpoint-url=http://${LOCALSTACK_HOST}:4566 sns subscribe --topic-arn arn:aws:sns:${AWS_REGION}:000000000000:${TOPIC} --protocol sqs --notification-endpoint ${QUEUE_ARN} --region ${AWS_REGION}
 }
 
-create_queue "event-hub"
-create_topic "events"
+create_queue "event-hub.fifo"
+create_topic "events.fifo"
 
-subscribe_queue_to_topic "events" "event-hub"
+subscribe_queue_to_topic "events.fifo" "event-hub.fifo"
